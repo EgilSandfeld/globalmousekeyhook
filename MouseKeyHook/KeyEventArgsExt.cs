@@ -104,7 +104,7 @@ namespace Gma.System.MouseKeyHook
 
             var keyData = AppendModifierStates((Keys) keyboardHookStruct.VirtualKeyCode);
 
-            var keyCode = (int) wParam;
+            var keyCode = (long) wParam;
             var isKeyDown = keyCode == Messages.WM_KEYDOWN || keyCode == Messages.WM_SYSKEYDOWN;
             var isKeyUp = keyCode == Messages.WM_KEYUP || keyCode == Messages.WM_SYSKEYUP;
 
