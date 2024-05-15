@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
   <PropertyGroup>
     <ProjectType>Local</ProjectType>
     <ProductVersion>9.0.21022</ProductVersion>
@@ -7,10 +7,10 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <AssemblyTitle>MouseKeyHook</AssemblyTitle>
     <AssemblyName>Gma.System.MouseKeyHook</AssemblyName>
-    <Version>5.6.1-alpha</Version>
+    <Version>5.7.1</Version>
     <DelaySign>false</DelaySign>
     <OutputType>Library</OutputType>
-    <TargetFrameworks>netcoreapp3.1;net462;net472</TargetFrameworks>
+    <TargetFrameworks>net7.0-windows;net6.0-windows;net472;net48</TargetFrameworks>
     <UseWindowsForms>true</UseWindowsForms>
     <RootNamespace>Gma.System.MouseKeyHook</RootNamespace>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
@@ -27,14 +27,15 @@
 
       Additionally, there is a possibility to supress certain keyboard or mouse clicks, or detect special key combinations.
     </Description>
-    <Copyright>(c) George Mamaladze 2000-2020</Copyright>
+    <Copyright>(c) George Mamaladze 2000-2023</Copyright>
     <PackageId>MouseKeyHook</PackageId>
-    <PackageIconUrl>https://raw.githubusercontent.com/gmamaladze/globalmousekeyhook/master/mouse-keyboard-hook-logo64x64.png</PackageIconUrl>
+    <PackageIconUrl></PackageIconUrl>
     <PackageProjectUrl>https://github.com/gmamaladze/globalmousekeyhook</PackageProjectUrl>
     <PackageTags>keyboard mouse hook event global spy</PackageTags>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <RepositoryUrl>https://github.com/gmamaladze/globalmousekeyhook</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
+    <PackageIcon>mouse-keyboard-hook-logo64x64.png</PackageIcon>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
@@ -67,6 +68,10 @@
     <DebugType>none</DebugType>
   </PropertyGroup>
   <ItemGroup>
+    <None Include="..\mouse-keyboard-hook-logo64x64.png">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
     <None Include="MouseKeyHook.nuspec" />
   </ItemGroup>
 </Project>
