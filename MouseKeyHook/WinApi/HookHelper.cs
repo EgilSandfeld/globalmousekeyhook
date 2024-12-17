@@ -67,18 +67,31 @@ namespace Gma.System.MouseKeyHook.WinApi
             return new HookResult(hookHandle, _globalHookProc);
         }
 
+        // private static IntPtr HookProcedure(int nCode, IntPtr wParam, IntPtr lParam, Callback callback)
+        // {
+        //     var passThrough = nCode != 0;
+        //     if (passThrough)
+        //         return CallNextHookEx(nCode, wParam, lParam);
+        //
+        //     var callbackData = new CallbackData(wParam, lParam);
+        //     var continueProcessing = callback(callbackData);
+        //
+        //     if (!continueProcessing)
+        //         return new IntPtr(-1);
+        //
+        //     return CallNextHookEx(nCode, wParam, lParam);
+        // }
         private static IntPtr HookProcedure(int nCode, IntPtr wParam, IntPtr lParam, Callback callback)
         {
-            var passThrough = nCode != 0;
-            if (passThrough)
-                return CallNextHookEx(nCode, wParam, lParam);
-
+            if (nCode != 0)
+                return new IntPtr(-1);  // Error condition, don't process
+        
             var callbackData = new CallbackData(wParam, lParam);
             var continueProcessing = callback(callbackData);
-
             if (!continueProcessing)
                 return new IntPtr(-1);
-
+            
+            // Always call next hook to allow proper keyboard processing
             return CallNextHookEx(nCode, wParam, lParam);
         }
 
