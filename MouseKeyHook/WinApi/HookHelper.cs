@@ -14,6 +14,7 @@ namespace Gma.System.MouseKeyHook.WinApi
     {
         private static HookProcedure _appHookProc;
         private static HookProcedure _globalHookProc;
+        private static HookResult _hookResult;
 
         public static HookResult HookAppMouse(Callback callback)
         {
@@ -58,13 +59,14 @@ namespace Gma.System.MouseKeyHook.WinApi
             var hookHandle = HookNativeMethods.SetWindowsHookEx(
                 hookId,
                 _globalHookProc,
-                Process.GetCurrentProcess().MainModule.BaseAddress,
+                IntPtr.Zero /*Process.GetCurrentProcess().MainModule.BaseAddress*/, // For WH_KEYBOARD_LL, it's safe to pass IntPtr.Zero
                 0);
 
             if (hookHandle.IsInvalid)
                 ThrowLastUnmanagedErrorAsException();
 
-            return new HookResult(hookHandle, _globalHookProc);
+            _hookResult = new HookResult(hookHandle, _globalHookProc);
+            return _hookResult;
         }
 
         // private static IntPtr HookProcedure(int nCode, IntPtr wParam, IntPtr lParam, Callback callback)
@@ -81,24 +83,60 @@ namespace Gma.System.MouseKeyHook.WinApi
         //
         //     return CallNextHookEx(nCode, wParam, lParam);
         // }
+
+        /*private static IntPtr HookProcedure(int nCode, IntPtr wParam, IntPtr lParam, Callback callback)
+        {
+            //When shifting to get diacritics / special characters, we don't want to process this key, but simple pass it on
+            if (nCode < 0)
+            {
+                // Pass the event to the next hook without processing
+                return CallNextHookEx(nCode, wParam, lParam);
+            }
+
+            // Create callback data from wParam and lParam
+            var callbackData = new CallbackData(wParam, lParam);
+
+            // Execute the callback to determine if processing should continue
+            var continueProcessing = callback(callbackData);
+
+            if (!continueProcessing)
+            {
+                // Block the event by returning a non-zero value
+                return new IntPtr(1);
+            }
+
+            // Always call the next hook to allow proper processing
+            return CallNextHookEx(nCode, wParam, lParam);
+        }*/
+        
         private static IntPtr HookProcedure(int nCode, IntPtr wParam, IntPtr lParam, Callback callback)
         {
-            if (nCode != 0)
-                return new IntPtr(-1);  // Error condition, don't process
-        
-            var callbackData = new CallbackData(wParam, lParam);
-            var continueProcessing = callback(callbackData);
-            if (!continueProcessing)
-                return new IntPtr(-1);
-            
-            // Always call next hook to allow proper keyboard processing
-            return CallNextHookEx(nCode, wParam, lParam);
-        }
+            if (nCode < 0)
+            {
+                // Pass the event to the next hook without processing
+                return HookNativeMethods.CallNextHookEx(IntPtr.Zero, nCode, wParam, lParam);
+            }
 
-        private static IntPtr CallNextHookEx(int nCode, IntPtr wParam, IntPtr lParam)
-        {
+            var callbackData = new CallbackData(wParam, lParam);
+            
+            // Always allow processing to continue
+            var continueProcessing = callback(callbackData);
+            //Console.WriteLine($"HookProcedure: nCode={nCode}, wParam={wParam}, lParam={lParam}, continueProcessing={continueProcessing}");
+            
+            if (!continueProcessing)
+            {
+                //Console.WriteLine("HookProcedure: Blocking the event.");
+                return new IntPtr(1); // Blocking the event
+            }
+
+            // Always allow the event to be processed further
             return HookNativeMethods.CallNextHookEx(IntPtr.Zero, nCode, wParam, lParam);
         }
+
+        /*private static IntPtr CallNextHookEx(int nCode, IntPtr wParam, IntPtr lParam)
+        {
+            return HookNativeMethods.CallNextHookEx(IntPtr.Zero, nCode, wParam, lParam);
+        }*/
 
         private static void ThrowLastUnmanagedErrorAsException()
         {
