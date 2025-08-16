@@ -36,7 +36,7 @@
     <RepositoryUrl>https://github.com/gmamaladze/globalmousekeyhook</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageIcon>mouse-keyboard-hook-logo64x64.png</PackageIcon>
-    <Configurations>Release;Debug</Configurations>
+    <Configurations>Release;Debug;Release Build</Configurations>
     <Platforms>x64</Platforms>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x64' ">
@@ -47,6 +47,12 @@
     <DefineConstants>TRACE;RELEASE</DefineConstants>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>pdbonly</DebugType>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release Build|x64' ">
+    <DefineConstants>TRACE;RELEASE</DefineConstants>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>pdbonly</DebugType>
+    <Optimize Condition=" '$(Optimize)' == '' ">true</Optimize>
   </PropertyGroup>
   <ItemGroup>
     <None Include="..\mouse-keyboard-hook-logo64x64.png">
