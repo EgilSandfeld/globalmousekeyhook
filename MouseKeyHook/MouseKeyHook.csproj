@@ -11,6 +11,7 @@
     <DelaySign>false</DelaySign>
     <OutputType>Library</OutputType>
     <TargetFrameworks>net7.0-windows;net6.0-windows;net472;net48</TargetFrameworks>
+      <RuntimeIdentifiers>win-x64</RuntimeIdentifiers>
     <UseWindowsForms>true</UseWindowsForms>
     <RootNamespace>Gma.System.MouseKeyHook</RootNamespace>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
