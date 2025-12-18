@@ -10,7 +10,6 @@
     <Version>5.7.1</Version>
     <DelaySign>false</DelaySign>
     <OutputType>Library</OutputType>
-    <TargetFrameworks>net7.0-windows;net6.0-windows;net472;net48</TargetFrameworks>
       <RuntimeIdentifiers>win-x64</RuntimeIdentifiers>
     <UseWindowsForms>true</UseWindowsForms>
     <RootNamespace>Gma.System.MouseKeyHook</RootNamespace>
@@ -39,6 +38,7 @@
     <PackageIcon>mouse-keyboard-hook-logo64x64.png</PackageIcon>
     <Configurations>Release;Debug;Release Build</Configurations>
     <Platforms>x64</Platforms>
+    <TargetFramework>net48</TargetFramework>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x64' ">
     <DefineConstants>TRACE;DEBUG</DefineConstants>
